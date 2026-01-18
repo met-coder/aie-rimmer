@@ -1,0 +1,18 @@
+{
+  "best_model_label": "HistGradientBoosting",
+  "test_metrics": {
+    "accuracy": 0.8882666666666666,
+    "f1_macro": 0.8633297480137164,
+    "roc_auc_ovr": 0.9540161521132718,
+    "model": "HistGradientBoosting"
+  },
+  "search_summary": {
+    "best_params": {
+      "learning_rate": 0.1,
+      "max_depth": null,
+      "max_leaf_nodes": 31
+    },
+    "best_cv_roc_auc": 0.9572383445347455
+  },
+  "random_state": 42
+}
