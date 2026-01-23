@@ -12,9 +12,9 @@
     "model":"LogReg(scaled)"
   },
   {
-    "accuracy":0.7778666667,
-    "f1_macro":0.7203323601,
-    "roc_auc_ovr":0.8752179653,
+    "accuracy":0.7725333333,
+    "f1_macro":0.7113485598,
+    "roc_auc_ovr":0.8753574997,
     "model":"DecisionTree"
   },
   {
