@@ -7,11 +7,14 @@
   },
   "DecisionTree": {
     "best_params": {
-      "ccp_alpha": 0.0,
-      "max_depth": 10,
-      "min_samples_leaf": 20
+      "ccp_alpha": 0.001,
+      "max_depth": 8,
+      "max_leaf_nodes": 64,
+      "min_impurity_decrease": 0.001,
+      "min_samples_leaf": 5,
+      "min_samples_split": 10
     },
-    "best_cv_roc_auc": 0.8717574000732189
+    "best_cv_roc_auc": 0.8493732601574255
   },
   "RandomForest": {
     "best_params": {

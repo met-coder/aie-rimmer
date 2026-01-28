@@ -1,32 +1,27 @@
-[
-  {
-    "accuracy":0.5424,
-    "f1_macro":0.234439834,
-    "roc_auc_ovr":0.5,
-    "model":"Dummy(most_frequent)"
+{
+  "Dummy(most_frequent)": {
+    "accuracy": 0.5424,
+    "f1_macro": 0.2344398340248963,
+    "roc_auc_ovr": 0.5
   },
-  {
-    "accuracy":0.7197333333,
-    "f1_macro":0.6627759091,
-    "roc_auc_ovr":0.8467807885,
-    "model":"LogReg(scaled)"
+  "LogReg(scaled)": {
+    "accuracy": 0.7197333333333333,
+    "f1_macro": 0.6627759091198723,
+    "roc_auc_ovr": 0.8467807884896156
   },
-  {
-    "accuracy":0.7725333333,
-    "f1_macro":0.7113485598,
-    "roc_auc_ovr":0.8753574997,
-    "model":"DecisionTree"
+  "DecisionTree": {
+    "accuracy": 0.7522666666666666,
+    "f1_macro": 0.6813152822080654,
+    "roc_auc_ovr": 0.8478913165225266
   },
-  {
-    "accuracy":0.8842666667,
-    "f1_macro":0.8561719873,
-    "roc_auc_ovr":0.9526040601,
-    "model":"RandomForest"
+  "RandomForest": {
+    "accuracy": 0.8842666666666666,
+    "f1_macro": 0.856171987260257,
+    "roc_auc_ovr": 0.9526040600804815
   },
-  {
-    "accuracy":0.8882666667,
-    "f1_macro":0.863329748,
-    "roc_auc_ovr":0.9540161521,
-    "model":"HistGradientBoosting"
+  "HistGradientBoosting": {
+    "accuracy": 0.8882666666666666,
+    "f1_macro": 0.8633297480137164,
+    "roc_auc_ovr": 0.9540161521132718
   }
-]
+}
