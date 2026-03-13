@@ -1,0 +1,14 @@
+{
+  "experiment": "E4",
+  "dataset": "EMNIST(split='balanced')",
+  "seed": 42,
+  "model_summary": "MLP (256, 128); ReLU; Dropout(p=0.3); BatchNorm",
+  "optimizer": "Adam",
+  "lr": 0.001,
+  "weight_decay": 0.0,
+  "epochs_trained": 18,
+  "best_val_accuracy": 0.8565501412429378,
+  "best_val_loss": 0.4243739990696395,
+  "test_accuracy": 0.8491177721088435,
+  "test_loss": 0.4417377516221838
+}
