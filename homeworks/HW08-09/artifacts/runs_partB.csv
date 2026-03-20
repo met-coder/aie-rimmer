@@ -1,4 +1,4 @@
-exp_id,optimizer,lr,weight_decay,momentum,epochs_ran,best_val_acc,best_val_loss
-O1,adam,0.1,0.0,,6,0.022687146892655368,3.867364180290093
-O2,adam,1e-05,0.0,,6,0.6028425141242938,1.4423171396309373
-O3,sgd,0.1,0.0,0.9,6,0.3150600282485876,2.4832969829861056
+experiment_id,optimizer,lr,weight_decay,momentum,best_val_loss,dataset,seed,model_summary,epochs_trained,best_val_accuracy
+O1,adam,0.1,0.0,,3.8645985840404102,EMNIST(split='balanced'),42,"MLP (256, 128); ReLU",6,0.022775423728813558
+O2,adam,1e-05,0.0,,1.4354017514966975,EMNIST(split='balanced'),42,"MLP (256, 128); ReLU",6,0.6076977401129944
+O3,sgd,0.1,0.0,0.9,2.3045228113562373,EMNIST(split='balanced'),42,"MLP (256, 128); ReLU",6,0.4112817796610169

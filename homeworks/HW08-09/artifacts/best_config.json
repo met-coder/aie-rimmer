@@ -2,7 +2,7 @@
   "experiment": "E4",
   "dataset": "EMNIST(split='balanced')",
   "seed": 42,
-  "model_summary": "MLP (256, 128); ReLU; Dropout(p=0.3); BatchNorm",
+  "model_summary": "MLP (256, 128); ReLU; Dropout(0.3); BatchNorm(True)",
   "optimizer": "Adam",
   "lr": 0.001,
   "weight_decay": 0.0,
