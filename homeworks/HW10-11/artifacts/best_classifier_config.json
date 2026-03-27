@@ -1,0 +1,12 @@
+{
+  "dataset": "CIFAR-10",
+  "architecture": "C4",
+  "augmentations": "ResNet",
+  "pretrained": true,
+  "fine_tune": "layer4+fc",
+  "learning_rate": 0.001,
+  "batch_size": 64,
+  "epochs": 3,
+  "seed": 42,
+  "best_val_accuracy": 0.8366666666666667
+}

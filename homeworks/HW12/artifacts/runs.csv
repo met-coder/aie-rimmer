@@ -1,0 +1,5 @@
+experiment_id,task,dataset,seed,split_summary,window_size,horizon,model_summary,features_summary,scaler,optimizer,lr,epochs_trained,best_val_mae,best_val_rmse,best_val_mape,test_mae,test_rmse,test_mape,notes
+B1,forecasting,S12-hw-dataset,42,70/15/15 temporal,1,1,Naive Last,lag_1,none,none,0.0,0,6.444814814814815,8.20102295260389,4.39792166354992,6.342438271604938,8.05906919540317,4.1485481293996385,Baseline
+B2,forecasting,S12-hw-dataset,42,70/15/15 temporal,7,1,Moving Average,rolling_mean_7,none,none,0.0,0,12.702012786596118,15.217644526713752,8.81686403093607,12.74030864197531,15.238698825884764,8.549006329583134,Baseline
+B3,forecasting,S12-hw-dataset,42,70/15/15 temporal,28,1,Ridge Regression,"lag, rolling, calendar",StandardScaler,none,0.0,0,5.031672266266776,6.385766414946463,3.376941591966756,5.064920354127599,6.593599609921728,3.3576914760882786,Linear baseline
+R1,forecasting,S12-hw-dataset,42,70/15/15 temporal,7,1,GRU(hidden=32),"lag, rolling, calendar",StandardScaler,Adam,0.001,50,34.647159576416016,38.52007118574292,21.97840118408203,39.17470932006836,42.749337531416785,24.26375389099121,Best: B3 (Ridge)
