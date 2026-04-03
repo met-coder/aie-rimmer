@@ -1,7 +1,0 @@
-{
-  "best_experiment": "C4",
-  "best_val_accuracy": 0.8366666666666667,
-  "test_accuracy": 0.162,
-  "detection_v1_avg_boxes": 1.2,
-  "detection_v2_avg_boxes": 0.0
-}

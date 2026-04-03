@@ -1,5 +1,7 @@
-experiment,model,augmentations,pretrained,fine_tune,val_accuracy,params,test_accuracy
-C1,SimpleCNN,None,False,None,0.396,620362,
-C2,SimpleCNN,RandomCrop+Flip,False,None,0.3993333333333333,620362,
-C3,ResNet18,ResNet,True,head-only,0.6933333333333334,5130,
-C4,ResNet18,ResNet,True,layer4+fc,0.8366666666666667,8398858,0.162
+experiment_id,task,dataset,seed,model_summary,optimizer,lr,epochs_trained,best_val_accuracy,test_accuracy,precision,recall,mean_iou,notes
+C1,classification,STL10,42,SimpleCNN,Adam,0.001,3,0.503,,,,,Base
+C2,classification,STL10,42,SimpleCNN,Adam,0.001,3,0.462,,,,,Aug
+C3,classification,STL10,42,ResNet18,Adam,0.001,3,0.474,,,,,HeadOnly
+C4,classification,STL10,42,ResNet18,Adam,0.0001,3,0.597,0.567375,,,,PartialFT
+V1,detection,PascalVOC,42,FasterRCNN,-,-,-,,,0.27272727272122554,0.9044117646393814,0.8022645174003229,thresh=0.3
+V2,detection,PascalVOC,42,FasterRCNN,-,-,-,,,0.5223214285481106,0.8602941175838018,0.8090484076076083,thresh=0.7
