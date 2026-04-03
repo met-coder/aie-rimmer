@@ -49,7 +49,7 @@
 
 ## 5. Часть B: постановка задачи и режимы оценки (V1-V2)
 
-- Если выбран detection track
+- выбран detection track
   - Модель: `FasterRCNN_ResNet50_FPN` (pretrained COCO)
   - V1: `score_threshold = 0.3`
   - V2: `score_threshold = 0.7`
