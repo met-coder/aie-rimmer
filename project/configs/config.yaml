@@ -1,0 +1,18 @@
+model:
+  path: "artifacts/model.pt"
+  image_size: 28
+  num_classes: 10
+service:
+  port: 8000
+  log_level: "INFO"
+classes:
+  - "T-shirt/top"
+  - "Trouser"
+  - "Pullover"
+  - "Dress"
+  - "Coat"
+  - "Sandal"
+  - "Shirt"
+  - "Sneaker"
+  - "Bag"
+  - "Ankle boot"
