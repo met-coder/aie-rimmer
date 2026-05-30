@@ -1,3 +1,4 @@
+import inspect
 import json
 import os
 import random
@@ -25,7 +26,7 @@ def train() -> None:
     image_size = cfg["model"].get("image_size", 28)
     num_classes = cfg["model"].get("num_classes", 10)
     batch_size = cfg["model"].get("batch_size", 128)
-    epochs = cfg["model"].get("epochs", 3)
+    epochs = cfg["model"].get("epochs", 4)
     lr = cfg["model"].get("lr", 1e-3)
     num_workers = cfg["model"].get("num_workers", 0)
 
@@ -70,12 +71,19 @@ def train() -> None:
     X_test = test_dataset.data.numpy().reshape(-1, image_size * image_size).astype(np.float32) / 255.0
     y_test = test_dataset.targets.numpy()
 
+    def create_logistic_regression(**kwargs: Any) -> LogisticRegression:
+        supported_args = {
+            name: value
+            for name, value in kwargs.items()
+            if name in inspect.signature(LogisticRegression).parameters
+        }
+        return LogisticRegression(**supported_args)
+
     print("Training baseline LogisticRegression...")
-    baseline = LogisticRegression(
+    baseline = create_logistic_regression(
         solver="lbfgs",
         multi_class="multinomial",
-        max_iter=100,
-        n_jobs=-1,
+        max_iter=1000,
         verbose=0,
     )
     baseline.fit(X_train, y_train)
