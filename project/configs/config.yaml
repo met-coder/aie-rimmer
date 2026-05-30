@@ -1,7 +1,11 @@
-model:
+﻿model:
   path: "artifacts/model.pt"
   image_size: 28
   num_classes: 10
+  batch_size: 128
+  epochs: 3
+  lr: 0.001
+  num_workers: 0
 service:
   port: 8000
   log_level: "INFO"
