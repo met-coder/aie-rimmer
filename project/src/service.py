@@ -42,15 +42,6 @@ app.state.predictor = None
 app.state.model_loaded = False
 app.state.metrics = {"requests": 0, "total_latency_ms": 0.0}
 
-try:
-    predictor, _ = load_model()
-    app.state.predictor = predictor
-    app.state.model_loaded = True
-    logging.info("Model loaded successfully during import.")
-except Exception:
-    logging.exception("Failed to load model during import")
-    app.state.predictor = None
-    app.state.model_loaded = False
 
 
 @app.middleware("http")
@@ -74,7 +65,7 @@ def health_check():
     return {
         "status": "ok",
         "model_loaded": app.state.model_loaded,
-        "available_classes": CLASSES,
+        "available_classes": app.state.config.get("classes", CLASSES),
         "total_requests": app.state.metrics.get("requests", 0),
     }
 

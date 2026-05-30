@@ -1,4 +1,6 @@
 import json
+import os
+import random
 from pathlib import Path
 from typing import Any, Dict
 
@@ -27,13 +29,29 @@ def train() -> None:
     lr = cfg["model"].get("lr", 1e-3)
     num_workers = cfg["model"].get("num_workers", 0)
 
+    seed = int(cfg.get("seed", 42))
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+
+    # device selection
+    requested_device = cfg.get("device") or os.getenv("DEVICE")
+    if requested_device == "cuda" and torch.cuda.is_available():
+        device = torch.device("cuda")
+    else:
+        device = torch.device("cpu")
+
     model_path = resolve_path(cfg["model"]["path"])
     metrics_path = resolve_path("artifacts/metrics.json")
     model_path.parent.mkdir(parents=True, exist_ok=True)
     metrics_path.parent.mkdir(parents=True, exist_ok=True)
 
     transform = get_transform(image_size)
-    train_dataset = datasets.FashionMNIST(
+    full_train = datasets.FashionMNIST(
         root=PROJECT_ROOT / "data",
         train=True,
         download=True,
@@ -47,9 +65,9 @@ def train() -> None:
     )
 
     # Baseline evaluation: Logistic Regression on flattened pixels
-    X_train = train_dataset.data.numpy().reshape(-1, 28 * 28).astype(np.float32) / 255.0
-    y_train = train_dataset.targets.numpy()
-    X_test = test_dataset.data.numpy().reshape(-1, 28 * 28).astype(np.float32) / 255.0
+    X_train = full_train.data.numpy().reshape(-1, image_size * image_size).astype(np.float32) / 255.0
+    y_train = full_train.targets.numpy()
+    X_test = test_dataset.data.numpy().reshape(-1, image_size * image_size).astype(np.float32) / 255.0
     y_test = test_dataset.targets.numpy()
 
     print("Training baseline LogisticRegression...")
@@ -65,10 +83,22 @@ def train() -> None:
     baseline_accuracy = float(accuracy_score(y_test, baseline_preds))
     print(f"Baseline LogisticRegression accuracy: {baseline_accuracy:.4f}")
 
+    # split train -> train / val
+    train_size = int(len(full_train) * 0.9)
+    val_size = len(full_train) - train_size
+    g = torch.Generator().manual_seed(seed)
+    train_dataset, val_dataset = torch.utils.data.random_split(full_train, [train_size, val_size], generator=g)
+
     train_loader = DataLoader(
         train_dataset,
         batch_size=batch_size,
         shuffle=True,
+        num_workers=num_workers,
+    )
+    val_loader = DataLoader(
+        val_dataset,
+        batch_size=batch_size,
+        shuffle=False,
         num_workers=num_workers,
     )
 
@@ -76,7 +106,6 @@ def train() -> None:
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
 
-    device = torch.device("cpu")
     model.to(device)
 
     for epoch in range(1, epochs + 1):
@@ -100,9 +129,24 @@ def train() -> None:
             total += labels.size(0)
 
         avg_loss = total_loss / total
-        accuracy = correct / total
-        print(f"Epoch {epoch}/{epochs} - loss={avg_loss:.4f} acc={accuracy:.4f}")
+        train_acc = correct / total
+        # validation
+        model.eval()
+        val_correct = 0
+        val_total = 0
+        with torch.no_grad():
+            for images, labels in val_loader:
+                images = images.to(device)
+                labels = labels.to(device)
+                outputs = model(images)
+                preds = outputs.argmax(dim=1)
+                val_correct += (preds == labels).sum().item()
+                val_total += labels.size(0)
 
+        val_acc = val_correct / val_total if val_total > 0 else 0.0
+        print(f"Epoch {epoch}/{epochs} - loss={avg_loss:.4f} train_acc={train_acc:.4f} val_acc={val_acc:.4f}")
+
+    # final evaluation on test set
     model.eval()
     all_preds = []
     all_labels = []
@@ -121,10 +165,12 @@ def train() -> None:
 
     metrics: Dict[str, Any] = {
         "dataset": "Fashion-MNIST",
+        "seed": seed,
+        "device": str(device),
         "baseline": {
             "model": "LogisticRegression",
             "accuracy": baseline_accuracy,
-            "description": "Logistic regression on flattened 28x28 pixel images",
+            "description": "Logistic regression on flattened pixels",
         },
         "final_model": {
             "name": "SimpleCNN",
@@ -132,7 +178,7 @@ def train() -> None:
             "accuracy": final_accuracy,
             "description": "CNN trained in src/train.py and saved to artifacts/model.pt",
         },
-        "notes": "Метрики сохранены автоматически при запуске src/train.py.",
+        "validation_accuracy": val_acc,
     }
 
     with metrics_path.open("w", encoding="utf-8") as f:

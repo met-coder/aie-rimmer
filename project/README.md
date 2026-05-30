@@ -30,85 +30,46 @@
 - `tests/` – тесты (юнит-тесты, простые проверки).
 - `artifacts/` – сохранённые модели, отчёты и результаты экспериментов (`model.pt`, `metrics.json`).
 
-3. Требования и установка
-3.1. Требования
-Python `>= 3.10` (уточните при необходимости).
-Установленные системные зависимости (если есть: например, `git`, `make` и т.п.).
+3. Требования и быстрый запуск
 
-3.2. Установка окружения
-# Перейти в папку проекта
-cd project
+Требования:
 
-# Создать виртуальное окружение (опционально, но рекомендуется)
+- Python >= 3.10
+- Docker (опционально для контейнеризации)
+
+Быстрый старт — команды для Windows PowerShell (копировать/вставить):
+
+```powershell
+cd "c:\Users\Matthew\Desktop\цифровая кафедра\aie-rimmer\project"
 python -m venv .venv
-
-# Активировать окружение:
-# Windows:
-.venv\Scripts\activate
-# Linux / macOS:
-source .venv/bin/activate
-
-# Установить зависимости
-pip install --upgrade pip
+.\.venv\Scripts\activate
+python -m pip install --upgrade pip
 pip install -r requirements.txt
-
-4. Как запустить проект
-4.1. Запуск обучения модели
-
-Windows (PowerShell / CMD):
-.venv\Scripts\activate
-python src\train.py
-
-Linux / macOS:
-source .venv/bin/activate
-python src/train.py
-
-После успешного выполнения модель сохраняется в `artifacts/model.pt` (путь относительно корня проекта). 
-
-Дополнительно в `artifacts/metrics.json` хранится результат сравнения baseline и итоговой модели по accuracy.
-
-# Альтернативно, можно использовать ноутбуки для экспериментов
-# jupyter notebook notebooks/
-# запускать существующие экспериментальные ноутбуки, например 01_eda_baseline.ipynb
-
-4.2. Запуск сервиса (API/веб-интерфейс)
-Вариант 1: Без Docker (локально)
-cd project
-source .venv/bin/activate
+# Обучить модель и сохранить в artifacts/
+python -m src.train
+# Запустить сервис
 uvicorn src.service:app --host 0.0.0.0 --port 8000
-
-Или, если используется Docker:
-cd project
-docker build -t fashion-cls .
-docker run -p 8000:8000 fashion-cls
-
-Опишите:
-- Сервис поднимается на порту `8000`.
-- Эндпоинты: `GET /health` (проверка статуса), `POST /predict` (приём изображения, возврат класса и уверенности).
-- Эндпоинты: `GET /health` (проверка статуса), `POST /predict` (приём изображения, возврат класса и уверенности).
-- Дополнительно: `GET /metrics` — простая внутренняя метрика запросов (count, avg_latency_ms).
-- Тестирование: открыть `http://localhost:8000/docs` и отправить запрос через Swagger UI, либо `curl -X POST http://localhost:8000/predict -F "file=@path/to/image.png"`.
-
-Советы по запуску и окружению:
-
-- Переменные окружения, которые поддерживаются:
-  - `PORT` — порт (по умолчанию `8000`)
-  - `LOG_LEVEL` — уровень логирования (`DEBUG`, `INFO`, `WARNING`, `ERROR`)
-  - `MODEL_PATH` — путь к файлу модели (относительный или абсолютный). По умолчанию указан в `configs/config.yaml`.
-
-Пример запуска через Docker (порт и лог уровень можно задать через env):
-
-```bash
-docker build -t fashion-cls .
-docker run -p 8000:8000 -e PORT=8000 -e LOG_LEVEL=INFO fashion-cls
 ```
 
-Запуск тестов (локально в виртуальном окружении):
+Docker:
 
-```bash
-cd project
-.venv\Scripts\activate   # Windows
-pip install -r requirements.txt
+```powershell
+docker build -t fashion-cls .
+docker run -p 8000:8000 fashion-cls
+```
+
+Переменные окружения (опционально):
+
+- `MODEL_PATH` — путь к файлу модели (по умолчанию `artifacts/model.pt`)
+- `PORT` — порт сервиса
+- `LOG_LEVEL` — уровень логирования
+- `DEVICE` — `cpu` или `cuda` (если доступна)
+
+Тестирование:
+
+```powershell
+cd "c:\Users\Matthew\Desktop\цифровая кафедра\aie-rimmer\project"
+.\.venv\Scripts\activate
 pytest -q
 ```
 
