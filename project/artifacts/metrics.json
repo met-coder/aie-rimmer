@@ -1,0 +1,15 @@
+{
+  "dataset": "Fashion-MNIST",
+  "baseline": {
+    "model": "LogisticRegression",
+    "accuracy": 0.8339,
+    "description": "Logistic regression on flattened 28x28 pixel images"
+  },
+  "final_model": {
+    "name": "SimpleCNN",
+    "model_path": "model.pt",
+    "accuracy": 0.8842,
+    "description": "CNN trained in src/train.py and saved to artifacts/model.pt"
+  },
+  "notes": "Артефакт содержит основные метрики экспериментов: baseline и итоговая модель."
+}
